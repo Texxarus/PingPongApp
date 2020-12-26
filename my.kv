@@ -1,0 +1,31 @@
+#:kivy 1.0.9
+
+
+<MyFirstWidget>:
+    # both these variables can be the same name and this doesn't lead to
+    # an issue with uniqueness as the id is only accessible in kv.
+    txt_inpt: txt_inpt
+    Button:
+        id: f_but
+    TextInput:
+        id: txt_inpt
+        text: f_but.state
+        on_text: root.check_status(f_but)
+
+    FloatLayout:
+        
+        TextInput:
+            font_size: 30
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.6}
+            id: login
+            halign: 'center'
+        #TextInput:
+            #id: passw
+            #password: True # hide password
+        Button:
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.5}
+            #center_x: root.width/2    
+            text: "Login"
+            on_release: root.verify_credentials()

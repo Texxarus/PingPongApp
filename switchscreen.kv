@@ -1,0 +1,44 @@
+ScreenManagement:
+    LoginPage:
+    UserPage:
+
+<LoginPage>:
+    name: "login_page"
+    canvas:
+        #Rectangle:
+            #pos: self.pos
+            #size: self.size
+            #source: 'xmas.jpg' 
+
+    
+
+    FloatLayout:
+
+        Label:
+            color: 1, 0, 1, 1
+            font_size: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+            text: root.text_label
+
+        TextInput:
+            font_size: 30
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.6}
+            id: login
+            halign: 'center'
+        #TextInput:
+            #id: passw
+            #password: True # hide password
+        Button:
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.5}
+            #center_x: root.width/2    
+            text: "Login"
+            on_release: root.verify_credentials()
+
+
+<UserPage>:
+    name: "user"
+    Button:
+        text: "back"
+        on_release: app.root.current = "login_page"

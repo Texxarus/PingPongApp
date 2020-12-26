@@ -1,0 +1,160 @@
+#:kivy 1.0.9
+ScreenManagement:
+    LoginPage:
+    PlayingPage:
+    OptionPage:
+    VictoryPage:
+    Another:
+
+<LoginPage>:
+    name: "login_page"
+    canvas:
+        #Rectangle:
+            #pos: self.pos
+            #size: self.size
+            #source: 'xmas.jpg' 
+
+    FloatLayout:
+
+        Label:
+            color: 1, 0, 1, 1
+            font_size: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+            text: root.text_label
+
+        TextInput:
+            font_size: 30
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.6}
+            id: login
+            halign: 'center'
+
+        Button:
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.5}
+            #center_x: root.width/2    
+            text: "Login"
+            on_release: root.verify_credentials()
+
+<OptionPage>:
+    name: "option_page"
+    canvas:
+        #Rectangle:
+            #pos: self.pos
+            #size: self.size
+            #source: 'xmas.jpg' 
+
+    FloatLayout:
+
+        Button:
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.6}
+            #center_x: root.width/2    
+            text: "1 Player"
+            on_release: root.one_player()
+        
+        Button:
+            size_hint: 0.5, 0.1
+            pos_hint: {'x': 0.25, 'y': 0.5}
+            #center_x: root.width/2    
+            text: "2 Player"
+            on_release: root.two_player()
+
+<PlayingPage>:
+    name: "playing_page"
+    on_enter: root.playing()
+    #on_leave: root.pausing()
+    PongGame:
+        id: my_pong_game
+
+<Another>:
+    name: "another"
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'merry.png'
+    Widget:
+        on_touch_down:      
+            app.root.current = "playing_page"
+
+<VictoryPage>:
+    name: "victory_page"
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'victory.jpg'
+    
+    Label:
+        font_size: 70  
+        color: 1, 0, 1, 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.8} 
+        text: str(root.manager.winner)
+
+    Widget:
+        on_touch_down:      
+            app.root.current = "option_page"
+
+
+<PongBall>:
+    size: 50, 50 
+    canvas:
+        Ellipse:
+            pos: self.pos
+            size: self.size          
+
+<PongPaddle>:
+    size: 25, 200
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PongGame>:
+    ball: pong_ball
+    player1: player_left
+    player2: player_right
+   
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'xmas.jpg' 
+
+        Rectangle:
+            pos: self.center_x - 5, 0
+            size: 10, self.height
+    
+    Label:
+        font_size: 70  
+        center_x: root.width / 4
+        top: root.top - 50
+        text: str(root.player1.score)
+        
+    Label:
+        font_size: 70  
+        center_x: root.width * 3 / 4
+        top: root.top - 50
+        text: str(root.player2.score)
+    
+    PongBall:
+        id: pong_ball
+        center: self.parent.center
+        
+    PongPaddle:
+        id: player_left
+        x: root.x
+        center_y: root.center_y
+        
+        
+    PongPaddle:
+        id: player_right
+        x: root.width - self.width
+        center_y: root.center_y
+
+    #Button:
+    #    text: 'Press me'
+    #    center_x: root.width / 2
+    #    background_color: [1, 0, 0, 1]
+    #    on_press: on_press_button
