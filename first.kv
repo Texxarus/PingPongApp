@@ -3,23 +3,23 @@ ScreenManagement:
     LoginPage:
     PlayingPage:
     OptionPage:
-    VictoryPage:
-    Another:
+    KatsWin:
+    QuocWin:
 
 
 <LoginPage>:
     name: "login_page"
     canvas:
-        #Rectangle:
-            #pos: self.pos
-            #size: self.size
-            #source: 'xmas.jpg' 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'login_background.jpg' 
 
     FloatLayout:
 
         Label:
-            color: 1, 0, 1, 1
-            font_size: 20
+            color: 1, 1, 1, 1
+            font_size: 50
             pos_hint: {'center_x': 0.5, 'center_y': 0.8}
             text: root.text_label
 
@@ -40,25 +40,31 @@ ScreenManagement:
 <OptionPage>:
     name: "option_page"
     canvas:
-        #Rectangle:
-            #pos: self.pos
-            #size: self.size
-            #source: 'xmas.jpg' 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'option_background.jpg' 
 
     FloatLayout:
+
+        Label:
+            color: 0, 1, 1, 1
+            font_size: 50
+            pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+            text: "Select option:"
 
         Button:
             size_hint: 0.5, 0.1
             pos_hint: {'x': 0.25, 'y': 0.6}
             #center_x: root.width/2    
-            text: "1 Player"
+            text: "VS Katsuhiro"
             on_release: root.one_player()
         
         Button:
             size_hint: 0.5, 0.1
             pos_hint: {'x': 0.25, 'y': 0.5}
             #center_x: root.width/2    
-            text: "2 Player"
+            text: "2 Players"
             on_release: root.two_player()
 
 <PlayingPage>:
@@ -68,34 +74,34 @@ ScreenManagement:
     PongGame:
         id: my_pong_game
 
-<Another>:
-    name: "another"
+<QuocWin>:
+    name: "quocwin_page"
     canvas:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'merry.png'
-    Widget:
-        on_touch_down:      
-            app.root.current = "playing_page"
+            source: self.manager.quoc_img[self.manager.value]
+   # Widget:
+    #on_touch_down:      
+    #    app.root.current = "playing_page"
 
-<VictoryPage>:
-    name: "victory_page"
+<KatsWin>:
+    name: "katswin_page"
     canvas:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'victory.jpg'
+            source: self.manager.kats_img[self.manager.value]
     
-    Label:
-        font_size: 70  
-        color: 1, 0, 1, 1
-        pos_hint: {'center_x': 0.5, 'center_y': 0.8} 
-        text: str(root.manager.winner)
+    #Label:
+    #    font_size: 70  
+    #    color: 1, 0, 1, 1
+    #    pos_hint: {'center_x': 0.5, 'center_y': 0.8} 
+    #    text: str(root.manager.winner)
 
-    Widget:
-        on_touch_down:      
-            app.root.current = "option_page"
+    #Widget:
+    #    on_touch_down:      
+    #        app.root.current = "option_page"
 
 
 <PongBall>:
@@ -121,7 +127,7 @@ ScreenManagement:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'xmas.jpg' 
+            source: 'playing_background.jpg' 
 
         Rectangle:
             pos: self.center_x - 5, 0

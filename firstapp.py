@@ -2,13 +2,13 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import (
-    NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty
+    NumericProperty, ReferenceListProperty, ObjectProperty, StringProperty, ListProperty
 )
 from kivy.vector import Vector
 from kivy.clock import Clock
 import time
 from kivy.core.window import Window
-
+#Window.size = (1500, 600)
 v_x_init = Window.width / 50 # = 20 for width 1000, = 30 for width 1500
 
 class PongPaddle(Widget):
@@ -52,6 +52,7 @@ class PongGame(Widget):
     motion = NumericProperty(0)
     last_won = NumericProperty(1)
 
+    
     def serve_ball(self, vel=(v_x_init, 1)):
         #print("inside serveball")
         self.ball.center = self.center
@@ -63,7 +64,7 @@ class PongGame(Widget):
         # bounce of paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
-        print(self.width, v_x_init)
+        #print(self.width, v_x_init)
         # bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
@@ -97,35 +98,33 @@ class PongGame(Widget):
         #print('My p1score changed to', value)
         self.last_won = 1
 
-        if (value < 5 and value > 0):
+        if (value <= 5 and value > 0):
             self.parent.pausing()
-            #self.parent.manager.current = "another"
-            Clock.schedule_once (self.switch_to_another, 0.5)
-        elif value == 5:
-            self.parent.pausing()
+            self.parent.manager.value = value - 1
+            Clock.schedule_once (self.switch_to_KatsWin, 0.5)
+
+        if value == 5:
             self.player2.score = 0
             self.player1.score = 0
-            self.parent.manager.winner = "Player 1 Won"
-            self.parent.manager.current = "victory_page"
 
     def on_p2_score(self, instance, value):
         #print('My p2score changed to', value)   
         self.last_won = -1
         
-        if (value < 5 and value > 0):
+        if (value <=5 and value > 0):
             self.parent.pausing()
-            #self.parent.manager.current = "another"
-            Clock.schedule_once (self.switch_to_another, 0.5)
+            self.parent.manager.value = value - 1
+            Clock.schedule_once (self.switch_to_QuocWin, 0.5)
 
-        elif value == 5:
-            self.parent.pausing()
+        if value == 5:
             self.player2.score = 0
             self.player1.score = 0
-            self.parent.manager.winner = "Player 2 Won"
-            self.parent.manager.current = "victory_page"
-        
-    def switch_to_another(self, dt):
-        self.parent.manager.current = "another"
+
+    def switch_to_QuocWin(self, dt):
+        self.parent.manager.current = "quocwin_page"
+
+    def switch_to_KatsWin(self, dt):
+        self.parent.manager.current = "katswin_page"
 
     def on_touch_move(self, touch):
         if (touch.x < self.width / 3) and (self.parent.manager.option == 2) :
@@ -138,10 +137,10 @@ class LoginPage(Screen):
     text_label = StringProperty("Enter your name here!")
 
     def verify_credentials(self):
-        if self.ids["login"].text == "":
+        if self.ids["login"].text == "Quoc":
             self.manager.current = "option_page"
         else:
-            self.text_label = "Wrong! Your name is Quốc. Enter \"Quốc\" now!"
+            self.text_label = "Wrong! Your name is Quoc. Enter \"Quoc\" now!"
 
 class PlayingPage(Screen):
     
@@ -162,28 +161,41 @@ class PlayingPage(Screen):
 class OptionPage(Screen):
     
     def one_player(self):
-        print("1 player")
         self.manager.option = 1
         self.manager.current = "playing_page"
     def two_player(self):
-        print("2 player")
         self.manager.option = 2
         self.manager.current = "playing_page"
 
 
-class Another(Screen):
-    pass
+class QuocWin(Screen):
+    
+    #img_source = StringProperty(None)
+    def on_touch_down(self, touch):
+        if (self.manager.value == 4):
+            self.manager.current = "option_page"
+        else:
+            self.manager.current = "playing_page"
 
-class VictoryPage(Screen):
-    pass
+class KatsWin(Screen):
+    def on_touch_down(self, touch):
+        if (self.manager.value == 4):
+            self.manager.current = "option_page"
+        else:
+            self.manager.current = "playing_page"
+    
 
 class ScreenManagement(ScreenManager):
     option = NumericProperty(0)
     winner = StringProperty(None)
-    pass 
+    value = NumericProperty(0)
+
+    quoc_img = ListProperty(["quoc1.jpg", "quoc2.jpg", "quoc3.jpg", "quoc4.jpg", "quoc5.jpg"])
+    kats_img = ListProperty(["kats1.jpg", "kats2.jpg", "kats3.jpg", "kats4.jpg", "kats5.jpg"])
 
 class FirstApp(App):
     def builder(self):
+        self.icon = 'app_icon.jpg'
         return ScreenManagement()
 
 #class PongApp(App):
