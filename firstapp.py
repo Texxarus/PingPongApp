@@ -7,7 +7,9 @@ from kivy.properties import (
 from kivy.vector import Vector
 from kivy.clock import Clock
 import time
+from kivy.core.window import Window
 
+v_x_init = Window.width / 50 # = 20 for width 1000, = 30 for width 1500
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
@@ -50,18 +52,18 @@ class PongGame(Widget):
     motion = NumericProperty(0)
     last_won = NumericProperty(1)
 
-    def serve_ball(self, vel=(20, 1)):
-        print("inside serveball")
+    def serve_ball(self, vel=(v_x_init, 1)):
+        #print("inside serveball")
         self.ball.center = self.center
         self.ball.velocity = vel
 
     def update(self, dt):
         self.ball.move()
-
+        #self.motion = 10
         # bounce of paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
-
+        print(self.width, v_x_init)
         # bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
@@ -71,58 +73,59 @@ class PongGame(Widget):
         # went of to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
-            self.serve_ball(vel=(20, 1))
+            self.serve_ball(vel=(v_x_init, 1))
         if self.ball.x > self.width:
             self.player1.score += 1
-            self.serve_ball(vel=(-20, -1))
-        print(self.parent.manager.option)
+            self.serve_ball(vel=(-v_x_init, -1))
         if(self.parent.manager.option == 1):
-            self.motion = 5
+            self.motion = 10
             if self.ball.velocity_x < 0:
                 if(abs(self.player1.center_y - self.ball.center_y) > 10):
                     if (self.player1.center_y < self.ball.center_y):
                         self.player1.center_y += self.motion
-                        self.motion += 2
+                        #self.motion += 2
                         if self.player1.center_y > self.height: # checking if paddle goes above max height
                             self.player1.center_y = self.height
                     else:
                         self.player1.center_y -= self.motion
-                        self.motion += 2
+                        #self.motion += 2
                         if self.player1.center_y < 0: # if paddle goes below zero
                             self.player1.center_y = 0
         
 
     def on_p1_score(self, instance, value):
-        print('My p1score changed to', value)
+        #print('My p1score changed to', value)
         self.last_won = 1
 
         if (value < 5 and value > 0):
             self.parent.pausing()
-            self.parent.manager.current = "another"
+            #self.parent.manager.current = "another"
+            Clock.schedule_once (self.switch_to_another, 0.5)
         elif value == 5:
             self.parent.pausing()
             self.player2.score = 0
             self.player1.score = 0
             self.parent.manager.winner = "Player 1 Won"
             self.parent.manager.current = "victory_page"
-        #elif value == 0:
-            #self.parent.manager.current = "playing_page"
 
     def on_p2_score(self, instance, value):
-        print('My p2score changed to', value)   
+        #print('My p2score changed to', value)   
         self.last_won = -1
         
         if (value < 5 and value > 0):
             self.parent.pausing()
-            self.parent.manager.current = "another"
+            #self.parent.manager.current = "another"
+            Clock.schedule_once (self.switch_to_another, 0.5)
+
         elif value == 5:
             self.parent.pausing()
             self.player2.score = 0
             self.player1.score = 0
             self.parent.manager.winner = "Player 2 Won"
             self.parent.manager.current = "victory_page"
-        #elif value == 0:
-            #self.parent.manager.current = "playing_page"
+        
+    def switch_to_another(self, dt):
+        self.parent.manager.current = "another"
 
     def on_touch_move(self, touch):
         if (touch.x < self.width / 3) and (self.parent.manager.option == 2) :
@@ -136,7 +139,6 @@ class LoginPage(Screen):
 
     def verify_credentials(self):
         if self.ids["login"].text == "":
-            print("inside login page")
             self.manager.current = "option_page"
         else:
             self.text_label = "Wrong! Your name is Quốc. Enter \"Quốc\" now!"
@@ -148,13 +150,13 @@ class PlayingPage(Screen):
     def playing(self):
         self.enter_count += 1
         
-        self.ids.my_pong_game.serve_ball(vel=(self.ids.my_pong_game.last_won*20, self.ids.my_pong_game.last_won*1))
+        self.ids.my_pong_game.serve_ball(vel=(self.ids.my_pong_game.last_won*v_x_init, self.ids.my_pong_game.last_won*1))
         self.ids.my_pong_game.player2.center_y = self.ids.my_pong_game.center_y
         self.ids.my_pong_game.player1.center_y = self.ids.my_pong_game.center_y
         self.event = Clock.schedule_interval(self.ids.my_pong_game.update, 1.0 / 60.0)    
 
     def pausing(self):
-        print("Inside Pausing funtion")
+        #print("Inside Pausing funtion")
         self.event.cancel()  
 
 class OptionPage(Screen):

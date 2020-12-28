@@ -6,6 +6,7 @@ ScreenManagement:
     VictoryPage:
     Another:
 
+
 <LoginPage>:
     name: "login_page"
     canvas:
@@ -98,14 +99,14 @@ ScreenManagement:
 
 
 <PongBall>:
-    size: 50, 50 
+    #size: 50, 50 
     canvas:
         Ellipse:
             pos: self.pos
             size: self.size          
 
 <PongPaddle>:
-    size: 25, 200
+    #size: 25, 200
     canvas:
         Rectangle:
             pos: self.pos
@@ -139,16 +140,19 @@ ScreenManagement:
         text: str(root.player2.score)
     
     PongBall:
+        size: 50, 50
         id: pong_ball
         center: self.parent.center
         
     PongPaddle:
+        size: 25, root.height / 3.5   # was 200
         id: player_left
         x: root.x
         center_y: root.center_y
         
         
     PongPaddle:
+        size: 25, root.height / 3.5   # was 200
         id: player_right
         x: root.width - self.width
         center_y: root.center_y
