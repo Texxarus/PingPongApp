@@ -151,7 +151,7 @@ class PlayingPage(Screen):
         
         self.ids.my_pong_game.serve_ball(vel=(self.ids.my_pong_game.last_won*v_x_init, self.ids.my_pong_game.last_won*1))
         self.ids.my_pong_game.player2.center_y = self.ids.my_pong_game.center_y
-        self.ids.my_pong_game.player1.center_y = self.ids.my_pong_game.center_y
+        self.id.my_pong_game.player1.center_y = self.ids.my_pong_game.center_y
         self.event = Clock.schedule_interval(self.ids.my_pong_game.update, 1.0 / 60.0)    
 
     def pausing(self):

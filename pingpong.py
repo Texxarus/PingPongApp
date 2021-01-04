@@ -62,6 +62,8 @@ class PongGame(Widget):
         if touch.x > self.width - self.width / 3:
             self.player2.center_y = touch.y
 
+    #def on_touch_down(self, touch):
+    #    print('You tap the ass!')
     def on_press_button(self):
         print('You pressed the button!')
 

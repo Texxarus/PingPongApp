@@ -9,12 +9,19 @@ ScreenManagement:
 
 <LoginPage>:
     name: "login_page"
-    canvas:
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'login_background.jpg' 
-
+    #canvas:
+        #Rectangle:
+            #pos: self.pos
+            #size: 800, 600 #self.size
+            #source: 'login_background.jpg' 
+    Image:
+        source: 'login_background.jpg'
+        keep_ratio: False
+        allow_stretch: True
+        opacity: 0.8
+        size_hint: 0.8, 1
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+       
     FloatLayout:
 
         Label:
@@ -24,6 +31,7 @@ ScreenManagement:
             text: root.text_label
 
         TextInput:
+            multiline: False
             font_size: 30
             size_hint: 0.5, 0.1
             pos_hint: {'x': 0.25, 'y': 0.6}
@@ -88,11 +96,19 @@ ScreenManagement:
 <KatsWin>:
     name: "katswin_page"
     canvas:
+        Color:
+            rgba: 1, 1, 1, 1    
         Rectangle:
             pos: self.pos
             size: self.size
             source: self.manager.kats_img[self.manager.value]
-    
+    #Image:
+    #    source: self.parent.manager.kats_img[self.parent.manager.value]
+    #    keep_ratio: False
+    #    allow_stretch: True
+    #    size_hint: 0.8, 1
+    #    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
     #Label:
     #    font_size: 70  
     #    color: 1, 0, 1, 1
@@ -105,9 +121,13 @@ ScreenManagement:
 
 
 <PongBall>:
-    #size: 50, 50 
+    #size: 50, 50
+
     canvas:
+        Color:
+            rgba: 0, 0.75, 0.5, 1    # Green
         Ellipse:
+            
             pos: self.pos
             size: self.size          
 
